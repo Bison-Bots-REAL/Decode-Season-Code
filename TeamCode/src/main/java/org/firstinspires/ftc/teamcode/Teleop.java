@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class Teleop extends LinearOpMode{
@@ -14,42 +14,41 @@ public class Teleop extends LinearOpMode{
     @Override
     public void runOpMode() {
         // Initializing the motor direction and names
+
+        /// Driving
         DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
-        DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
-
-        Servo ramp = hardwareMap.get(Servo.class, "ramp");
-
-        ramp.setDirection(Servo.Direction.FORWARD);
-
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         frontRight.setDirection(DcMotor.Direction.FORWARD);
+
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
+        /// Launcher
+        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
+
+        DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
         launch.setDirection(DcMotor.Direction.FORWARD);
 
-        double rampPosition = 0.2;
-        ramp.setPosition(rampPosition);
+        Servo ramp = hardwareMap.get(Servo.class, "ramp");
+        ramp.setDirection(Servo.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        // Pauses the code here until the Play button is pressed after init
         waitForStart();
         runtime.reset();
 
-        double lowPower = 0.75;
-
-        double lowIntake = 1.0;
-        double lowLaunch = 1.0;
-
-        // run until the end of the match (driver presses STOP)
+        double driveLowPower = 0.75;
+        double intakeLowPower = 1.0;
+        double launchLowPower = 1.0;
 
         double frontLeftPower = 0;
         double backLeftPower = 0;
@@ -60,18 +59,26 @@ public class Teleop extends LinearOpMode{
         double LauncherPower = 0;
         double IntakePower = 0;
 
+        double rampPosition = 0.2;
+        ramp.setPosition(rampPosition);
+
+        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            /// Driving Input
             double max;
 
+            // Get Movement Input
             double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
 
+            // Calculate Wheel Power from Input (I don't know how this was figured out don't change this)
             frontLeftPower = axial + lateral + yaw;
             frontRightPower = axial - lateral - yaw;
             backLeftPower = axial - lateral + yaw;
             backRightPower = axial + lateral - yaw;
 
+            // Limit wheel power to the maximum it can handle
             max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
             max = Math.max(max, Math.abs(backLeftPower));
             max = Math.max(max, Math.abs(backRightPower));
@@ -83,15 +90,16 @@ public class Teleop extends LinearOpMode{
                 backRightPower /= max;
             }
 
-            IntakePower *= lowIntake;
+            // Apply Low Powers to components to slow down if needed
+            IntakePower *= intakeLowPower;
+            LauncherPower *= launchLowPower;
 
-            LauncherPower *= lowLaunch;
+            frontLeftPower = frontLeftPower * driveLowPower;
+            frontRightPower = frontRightPower * driveLowPower;
+            backLeftPower = backLeftPower * driveLowPower;
+            backRightPower = backRightPower * driveLowPower;
 
-            frontLeftPower = frontLeftPower * lowPower;
-            frontRightPower = frontRightPower * lowPower;
-            backLeftPower = backLeftPower * lowPower;
-            backRightPower = backRightPower * lowPower;
-
+            /// Launcher Inputs
             if (gamepad2.y)
             {
                 rampPosition = 0.3;
@@ -115,7 +123,7 @@ public class Teleop extends LinearOpMode{
                 LauncherPower = 0;
             }
 
-            // Send calculated power to the motor and servos
+            // Send calculated power to the motors and servos
             frontLeft.setPower(frontLeftPower);
             frontRight.setPower(frontRightPower);
             backLeft.setPower(backLeftPower);
@@ -127,6 +135,7 @@ public class Teleop extends LinearOpMode{
             ramp.setPosition(rampPosition);
         }
 
+        /// Telemetry
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);

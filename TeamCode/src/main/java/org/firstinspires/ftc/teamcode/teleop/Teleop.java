@@ -34,6 +34,7 @@ public class Teleop extends LinearOpMode {
 
         DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
         launch.setDirection(DcMotor.Direction.FORWARD);
+        launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp");
         ramp.setDirection(Servo.Direction.FORWARD);
@@ -59,11 +60,11 @@ public class Teleop extends LinearOpMode {
         double intakeLowPower = 1.0;
         double launchLowPower = 1.0;
 
-        double frontLeftPower = 0;
-        double backLeftPower = 0;
+        double frontLeftPower;
+        double backLeftPower;
 
-        double frontRightPower = 0;
-        double backRightPower = 0;
+        double frontRightPower;
+        double backRightPower;
 
         double LauncherPower = 0;
         double IntakePower = 0;
@@ -116,7 +117,7 @@ public class Teleop extends LinearOpMode {
                 if (fastlaunch) {
                     LauncherPower = 0.7;
                 } else {
-                    LauncherPower = 0.55;
+                    LauncherPower = 0.6;
                 }
             }
 
@@ -178,7 +179,7 @@ public class Teleop extends LinearOpMode {
 
             telemetry.addLine();
             telemetry.addLine("LAUNCHER BOOLS");
-            telemetry.addData("Launching?", fastlaunch);
+            telemetry.addData("Launching?", launching);
             telemetry.addData("FastMode?", fastlaunch);
 
             telemetry.addLine();

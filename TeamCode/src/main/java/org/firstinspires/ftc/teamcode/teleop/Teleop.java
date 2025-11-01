@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp
-public class Teleop extends LinearOpMode{
+@TeleOp(group = "Main")
+public class Teleop extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -42,9 +42,18 @@ public class Teleop extends LinearOpMode{
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        boolean debug = gamepad1.guide;
+
         // Pauses the code here until the Play button is pressed after init
         waitForStart();
         runtime.reset();
+
+        boolean fastlaunch = false;
+        boolean launching = false;
+
+        long lastTime = System.nanoTime();
+        int framecount = 0;
+        double currentFPS = 0.0;
 
         double driveLowPower = 0.75;
         double intakeLowPower = 1.0;
@@ -59,7 +68,7 @@ public class Teleop extends LinearOpMode{
         double LauncherPower = 0;
         double IntakePower = 0;
 
-        double rampPosition = 0.2;
+        double rampPosition = 0.35;
         ramp.setPosition(rampPosition);
 
         // run until the end of the match (driver presses STOP)
@@ -90,6 +99,45 @@ public class Teleop extends LinearOpMode{
                 backRightPower /= max;
             }
 
+            /// Launcher Inputs
+            if (gamepad2.y) {
+                rampPosition = 0.35;
+            }
+            else if (gamepad2.a) {
+                rampPosition = 0;
+            }
+
+            if (gamepad2.dpad_down) {
+                fastlaunch = false;
+            }
+            else if (gamepad2.dpad_up) {
+                fastlaunch = true;
+            }
+
+            if (launching) {
+                if (fastlaunch) {
+                    LauncherPower = 0.7;
+                }
+                else {
+                    LauncherPower = 0.55;
+                }
+            }
+
+            if (gamepad2.left_bumper) {
+                IntakePower = 1.0;
+            }
+            else if (gamepad2.x) {
+                IntakePower = -1.0;
+            }
+            else if (gamepad2.right_bumper) {
+                launching = true;
+            }
+            else if (gamepad2.b) {
+                IntakePower = 0;
+                LauncherPower = 0;
+                launching = false;
+            }
+
             // Apply Low Powers to components to slow down if needed
             IntakePower *= intakeLowPower;
             LauncherPower *= launchLowPower;
@@ -98,30 +146,6 @@ public class Teleop extends LinearOpMode{
             frontRightPower = frontRightPower * driveLowPower;
             backLeftPower = backLeftPower * driveLowPower;
             backRightPower = backRightPower * driveLowPower;
-
-            /// Launcher Inputs
-            if (gamepad2.y)
-            {
-                rampPosition = 0.3;
-            }
-            else if(gamepad2.a)
-            {
-                rampPosition = 0;
-            }
-
-            if (gamepad2.left_bumper)
-            {
-                IntakePower = 1.0;
-            }
-            else if (gamepad2.right_bumper)
-            {
-                LauncherPower = 0.90;
-            }
-            else if (gamepad2.b)
-            {
-                IntakePower = 0;
-                LauncherPower = 0;
-            }
 
             // Send calculated power to the motors and servos
             frontLeft.setPower(frontLeftPower);
@@ -133,11 +157,30 @@ public class Teleop extends LinearOpMode{
             intake.setPower(IntakePower);
 
             ramp.setPosition(rampPosition);
+
+            /// Calculate Frame Rate (Only use in debugging keep commented out in competition)
+            if (debug) {
+                long currentTime = System.nanoTime();
+                long elapsedTime = currentTime - lastTime;
+
+                framecount++;
+
+                if (elapsedTime >= 1000000000) {
+                    currentFPS = (double) framecount / (elapsedTime / 1000000000.0);
+                    framecount = 0;
+                    lastTime = currentTime;
+                }
+            }
         }
 
         /// Telemetry
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime);
+        if (debug) telemetry.addData("FPS", currentFPS);
+        telemetry.addLine();
+        telemetry.addData("Launching?", fastlaunch);
+        telemetry.addData("FastMode?", fastlaunch);
+        telemetry.addLine();
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
         telemetry.addData("Launcher", "%4.2f", LauncherPower);

@@ -68,7 +68,7 @@ public class Teleop extends LinearOpMode {
         double LauncherPower = 0;
         double IntakePower = 0;
 
-        double rampPosition = 0.35;
+        double rampPosition = 0.0;
         ramp.setPosition(rampPosition);
 
         // run until the end of the match (driver presses STOP)
@@ -187,6 +187,10 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.addData("Launcher", "%4.2f", LauncherPower);
             telemetry.addData("Intake", "%4.2f", IntakePower);
+
+            telemetry.addLine();
+            telemetry.addLine("SERVOS");
+            telemetry.addData("Ramp", "%4.2f", rampPosition);
 
             telemetry.update();
         }

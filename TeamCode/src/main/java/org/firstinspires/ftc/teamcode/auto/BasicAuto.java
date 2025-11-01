@@ -10,22 +10,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class BasicAuto extends LinearOpMode{
 
-    private ElapsedTime runtime = new ElapsedTime();
-
-
-    private DcMotor frontLeft = null;
-    private DcMotor backLeft = null;
-    private DcMotor frontRight = null;
-    private DcMotor backRight = null;
+    private final ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        frontLeft  = hardwareMap.get(DcMotor.class, "frontLeft");
-        backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
 
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -41,19 +35,16 @@ public class BasicAuto extends LinearOpMode{
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-            double frontLeftPower  = 0.5;
-            double frontRightPower = 0.5;
-            double backLeftPower   = 0.5;
-            double backRightPower  = 0.5;
+        double frontLeftPower  = 0.5;
+        double frontRightPower = 0.5;
+        double backLeftPower   = 0.5;
+        double backRightPower  = 0.5;
 
-            // Send calculated power to wheels
-            frontLeft.setPower(frontLeftPower);
-            frontRight.setPower(frontRightPower);
-            backLeft.setPower(backLeftPower);
-            backRight.setPower(backRightPower);
-            sleep(1250);
-            break;
-        }
+        // Send calculated power to wheels
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
+        sleep(1250);
     }
 }

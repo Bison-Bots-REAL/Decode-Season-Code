@@ -102,37 +102,31 @@ public class Teleop extends LinearOpMode {
             /// Launcher Inputs
             if (gamepad2.y) {
                 rampPosition = 0.35;
-            }
-            else if (gamepad2.a) {
+            } else if (gamepad2.a) {
                 rampPosition = 0;
             }
 
             if (gamepad2.dpad_down) {
                 fastlaunch = false;
-            }
-            else if (gamepad2.dpad_up) {
+            } else if (gamepad2.dpad_up) {
                 fastlaunch = true;
             }
 
             if (launching) {
                 if (fastlaunch) {
                     LauncherPower = 0.7;
-                }
-                else {
+                } else {
                     LauncherPower = 0.55;
                 }
             }
 
             if (gamepad2.left_bumper) {
                 IntakePower = 1.0;
-            }
-            else if (gamepad2.x) {
+            } else if (gamepad2.x) {
                 IntakePower = -1.0;
-            }
-            else if (gamepad2.right_bumper) {
+            } else if (gamepad2.right_bumper) {
                 launching = true;
-            }
-            else if (gamepad2.b) {
+            } else if (gamepad2.b) {
                 IntakePower = 0;
                 LauncherPower = 0;
                 launching = false;
@@ -171,20 +165,30 @@ public class Teleop extends LinearOpMode {
                     lastTime = currentTime;
                 }
             }
-        }
 
-        /// Telemetry
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime);
-        if (debug) telemetry.addData("FPS", currentFPS);
-        telemetry.addLine();
-        telemetry.addData("Launching?", fastlaunch);
-        telemetry.addData("FastMode?", fastlaunch);
-        telemetry.addLine();
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
-        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
-        telemetry.addData("Launcher", "%4.2f", LauncherPower);
-        telemetry.addData("Intake", "%4.2f", IntakePower);
-        telemetry.update();
+            /// Telemetry
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime);
+
+            if (debug) {
+                telemetry.addLine();
+                telemetry.addLine("DEBUG");
+                telemetry.addData("FPS", currentFPS);
+            }
+
+            telemetry.addLine();
+            telemetry.addLine("LAUNCHER BOOLS");
+            telemetry.addData("Launching?", fastlaunch);
+            telemetry.addData("FastMode?", fastlaunch);
+
+            telemetry.addLine();
+            telemetry.addLine("MOTORS");
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
+            telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
+            telemetry.addData("Launcher", "%4.2f", LauncherPower);
+            telemetry.addData("Intake", "%4.2f", IntakePower);
+
+            telemetry.update();
+        }
     }
 }

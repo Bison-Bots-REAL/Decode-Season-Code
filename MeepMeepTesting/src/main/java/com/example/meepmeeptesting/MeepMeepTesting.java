@@ -19,6 +19,34 @@ public class MeepMeepTesting {
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(61, 10, Math.toRadians(180)))
                 .strafeTo(new Vector2d(56,15))
                 .turn(Math.toRadians(40))
+                .waitSeconds(0.5)
+
+                .turnTo(Math.toRadians(90))
+                .strafeTo(new Vector2d(36,28))
+                .strafeTo(new Vector2d(36,52))
+
+                .turnTo(Math.toRadians(220))
+                .splineToConstantHeading(new Vector2d(56,15),0)
+                .waitSeconds(0.5)
+
+                .turnTo(Math.toRadians(90))
+                .strafeTo(new Vector2d(12,28))
+                .strafeTo(new Vector2d(12,52))
+
+                .turnTo(Math.toRadians(220))
+                .splineToConstantHeading(new Vector2d(56,15),0)
+                .waitSeconds(0.5)
+
+                .turnTo(Math.toRadians(90))
+                .strafeTo(new Vector2d(-11,28))
+                .strafeTo(new Vector2d(-11,52))
+
+                .turnTo(Math.toRadians(220))
+                .splineToConstantHeading(new Vector2d(56,15),0)
+                .waitSeconds(0.5)
+
+                .turnTo(180)
+                .strafeTo(new Vector2d(46,15))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)

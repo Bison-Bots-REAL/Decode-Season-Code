@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import android.util.Size;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,11 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(group = "Main")
-public class Teleop extends LinearOpMode {
+public class HuxleyTeleop extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -145,9 +142,9 @@ public class Teleop extends LinearOpMode {
                 }
             }
 
-            if (gamepad2.left_bumper) {
+            if (gamepad1.right_bumper) {
                 IntakePower = 1;
-            } else if (gamepad2.x) {
+            } else if (gamepad1.right_trigger > 0.1) {
                 IntakePower = -1;
             } else if (gamepad2.right_bumper) {
                 launching = true;
@@ -164,7 +161,7 @@ public class Teleop extends LinearOpMode {
                 launching = false;
             }
 
-            if (gamepad2.start) {
+            if (gamepad1.left_bumper) {
                 IntakePower = 0;
             }
 

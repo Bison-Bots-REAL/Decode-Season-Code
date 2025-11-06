@@ -1,10 +1,20 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import android.util.Size;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(group = "Main")
 public class Teleop extends LinearOpMode {
@@ -15,17 +25,26 @@ public class Teleop extends LinearOpMode {
     public void runOpMode() {
         // Initializing the motor direction and names
 
+        AprilTagProcessor apriltagprocessor = AprilTagProcessor.easyCreateWithDefaults();
+
+        VisionPortal visionportal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .addProcessor(apriltagprocessor)
+                .setCameraResolution(new Size(640, 480))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .build();
+
         /// Driving
-        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "leftFront");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "leftBack");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront");
         frontRight.setDirection(DcMotor.Direction.FORWARD);
 
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack");
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
         /// Launcher
@@ -35,6 +54,9 @@ public class Teleop extends LinearOpMode {
         DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
         launch.setDirection(DcMotor.Direction.FORWARD);
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
+        pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp");
         ramp.setDirection(Servo.Direction.FORWARD);
@@ -59,6 +81,7 @@ public class Teleop extends LinearOpMode {
         double driveLowPower = 0.75;
         double intakeLowPower = 1.0;
         double launchLowPower = 1.0;
+        double pusherupperLowPower = 0.8;
 
         double frontLeftPower;
         double backLeftPower;
@@ -68,6 +91,7 @@ public class Teleop extends LinearOpMode {
 
         double LauncherPower = 0;
         double IntakePower = 0;
+        double PusherUpperPower = 0;
 
         double rampPosition = 0.0;
         ramp.setPosition(rampPosition);
@@ -122,20 +146,30 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper) {
-                IntakePower = 1.0;
+                IntakePower = 1;
             } else if (gamepad2.x) {
-                IntakePower = -1.0;
+                IntakePower = -1;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {
-                IntakePower = 0;
                 LauncherPower = 0;
                 launching = false;
             }
 
+            if (gamepad2.back) {
+                rampPosition = 0;
+                IntakePower = 0;
+                PusherUpperPower = 0;
+                LauncherPower = 0;
+                launching = false;
+            }
+
+            PusherUpperPower = gamepad2.right_trigger;
+
             // Apply Low Powers to components to slow down if needed
             IntakePower *= intakeLowPower;
             LauncherPower *= launchLowPower;
+            PusherUpperPower *= pusherupperLowPower;
 
             frontLeftPower = frontLeftPower * driveLowPower;
             frontRightPower = frontRightPower * driveLowPower;
@@ -150,6 +184,7 @@ public class Teleop extends LinearOpMode {
 
             launch.setPower(LauncherPower);
             intake.setPower(IntakePower);
+            pusherupper.setPower(PusherUpperPower);
 
             ramp.setPosition(rampPosition);
 
@@ -188,6 +223,7 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.addData("Launcher", "%4.2f", LauncherPower);
             telemetry.addData("Intake", "%4.2f", IntakePower);
+            telemetry.addData("PusherUpper", "%4.2f", PusherUpperPower);
 
             telemetry.addLine();
             telemetry.addLine("SERVOS");

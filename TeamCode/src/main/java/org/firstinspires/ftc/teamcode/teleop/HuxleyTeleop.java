@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+@Disabled
 @TeleOp(group = "Main")
 public class HuxleyTeleop extends LinearOpMode {
 
@@ -49,7 +51,7 @@ public class HuxleyTeleop extends LinearOpMode {
         intake.setDirection(DcMotor.Direction.REVERSE);
 
         DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
-        launch.setDirection(DcMotor.Direction.FORWARD);
+        launch.setDirection(DcMotor.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
@@ -123,7 +125,7 @@ public class HuxleyTeleop extends LinearOpMode {
 
             /// Launcher Inputs
             if (gamepad2.y) {
-                rampPosition = 0.35;
+                rampPosition = 0.08;
             } else if (gamepad2.a) {
                 rampPosition = 0;
             }
@@ -136,16 +138,16 @@ public class HuxleyTeleop extends LinearOpMode {
 
             if (launching) {
                 if (fastlaunch) {
-                    LauncherPower = 0.7;
+                    LauncherPower = 1;
                 } else {
-                    LauncherPower = 0.6;
+                    LauncherPower = 0.7;
                 }
             }
 
             if (gamepad1.right_bumper) {
-                IntakePower = 1;
+                IntakePower = 0.4;
             } else if (gamepad1.right_trigger > 0.1) {
-                IntakePower = -1;
+                IntakePower = -0.4;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {

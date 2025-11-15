@@ -50,13 +50,16 @@ public class Teleop extends LinearOpMode {
         /// Launcher
         DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
-        launch.setDirection(DcMotor.Direction.FORWARD);
+        launch.setDirection(DcMotor.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
         pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
+        pusherupper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp");
         ramp.setDirection(Servo.Direction.FORWARD);
@@ -126,7 +129,7 @@ public class Teleop extends LinearOpMode {
 
             /// Launcher Inputs
             if (gamepad2.y) {
-                rampPosition = 0.35;
+                rampPosition = 0.08;
             } else if (gamepad2.a) {
                 rampPosition = 0;
             }
@@ -139,16 +142,16 @@ public class Teleop extends LinearOpMode {
 
             if (launching) {
                 if (fastlaunch) {
-                    LauncherPower = 0.7;
+                    LauncherPower = -0.6;
                 } else {
-                    LauncherPower = 0.6;
+                    LauncherPower = -0.5;
                 }
             }
 
             if (gamepad2.left_bumper) {
-                IntakePower = 1;
+                IntakePower =0.4;
             } else if (gamepad2.x) {
-                IntakePower = -1;
+                IntakePower = -0.4;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {

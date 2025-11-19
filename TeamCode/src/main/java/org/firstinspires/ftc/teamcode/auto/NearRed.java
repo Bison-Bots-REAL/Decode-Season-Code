@@ -5,6 +5,9 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -15,36 +18,199 @@ public class NearRed extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d beginPose = new Pose2d(-61, 10, Math.toRadians(0));
+        Pose2d beginPose = new Pose2d(-55, 46, Math.toRadians(-55));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
+        /// Launcher
+        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
+        intake.setDirection(DcMotor.Direction.REVERSE);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
+        launch.setDirection(DcMotor.Direction.REVERSE);
+        launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
+        pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
+        pusherupper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        Servo ramp = hardwareMap.get(Servo.class, "ramp");
+        ramp.setDirection(Servo.Direction.FORWARD);
 
         waitForStart();
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
+                        .stopAndAdd(telemetryPacket -> {
+                            intake.setPower(1);
+                            launch.setPower(0.6);
+                            return false;
+                        })
+
                         //.strafeTo(new Vector2d(50,15))
                         //.turn(Math.toRadians(-20))
                         .splineTo(new Vector2d(-14,15),Math.toRadians(140))
-                        .waitSeconds(0.5)
+                        .waitSeconds(0.2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(0.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(1.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            launch.setPower(0);
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0);
+                            return false;
+                        })
 
                         //.turnTo(Math.toRadians(90))
                         .splineTo(new Vector2d(-11,28),Math.toRadians(90))
                         //.strafeTo(new Vector2d(-11,28))
                         .strafeTo(new Vector2d(-11,42))
 
+                        .stopAndAdd(telemetryPacket -> {
+                            launch.setPower(0.6);
+                            return false;
+                        })
+
                         //.turnTo(Math.toRadians(160))
                         .splineTo(new Vector2d(-14,15),Math.toRadians(140))
-                        .waitSeconds(0.5)
+                        .waitSeconds(0.2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(0.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(1.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            launch.setPower(0);
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0);
+                            return false;
+                        })
 
                         //.turnTo(Math.toRadians(90))
                         .splineTo(new Vector2d(13,28),Math.toRadians(90))
                         //.strafeTo(new Vector2d(13,28))
                         .strafeTo(new Vector2d(13,42))
 
+                        .stopAndAdd(telemetryPacket -> {
+                            launch.setPower(0.6);
+                            return false;
+                        })
+
                         //.turnTo(Math.toRadians(160))
                         .splineTo(new Vector2d(-14,15),Math.toRadians(140))
-                        .waitSeconds(0.5)
+                        .waitSeconds(0.2)
 
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            ramp.setPosition(0);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(0.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0.085);
+                            return false;
+                        })
+
+                        .waitSeconds(2)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            pusherupper.setPower(0.8);
+                            return false;
+                        })
+
+                        .waitSeconds(1.8)
+
+                        .stopAndAdd(telemetryPacket -> {
+                            launch.setPower(0);
+                            pusherupper.setPower(0);
+                            ramp.setPosition(0);
+                            return false;
+                        })
+
+                        /*
                         //.turnTo(Math.toRadians(90))
                         .splineTo(new Vector2d(36,28),Math.toRadians(90))
                         //.strafeTo(new Vector2d(37,28))
@@ -53,6 +219,7 @@ public class NearRed extends LinearOpMode {
                         //.turnTo(Math.toRadians(160))
                         .splineTo(new Vector2d(-14,15),Math.toRadians(140))
                         .waitSeconds(0.5)
+                         */
 
                         .splineTo(new Vector2d(6,15),Math.toRadians(0))
                         //.turnTo(Math.toRadians(0))

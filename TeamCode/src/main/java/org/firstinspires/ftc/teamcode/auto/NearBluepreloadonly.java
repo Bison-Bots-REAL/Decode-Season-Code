@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -17,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous
-public class NearBlue extends LinearOpMode {
+public class NearBluepreloadonly extends LinearOpMode {
     private final ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -102,6 +98,7 @@ public class NearBlue extends LinearOpMode {
                             return false;
                         })
 
+                        /*
                         //.turnTo(Math.toRadians(90))
                         .splineTo(new Vector2d(-11,-28),Math.toRadians(-90))
                         //.strafeTo(new Vector2d(-11,28))
@@ -121,32 +118,19 @@ public class NearBlue extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(0.1)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(0);
-                            return false;
-                        })
-
-                        .waitSeconds(2)
-
-                        .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);
                             return false;
                         })
 
-                        .waitSeconds(0.8)
+                        .waitSeconds(2.1)
 
                         .stopAndAdd(telemetryPacket -> {
-                            pusherupper.setPower(0);
+                            pusherupper.setPower(0.5);
                             ramp.setPosition(0.085);
-                            return false;
-                        })
-
-                        .waitSeconds(2)
-
-                        .stopAndAdd(telemetryPacket -> {
-                            pusherupper.setPower(0.8);
                             return false;
                         })
 
@@ -155,7 +139,6 @@ public class NearBlue extends LinearOpMode {
                         .stopAndAdd(telemetryPacket -> {
                             launch.setPower(0);
                             pusherupper.setPower(0);
-                            ramp.setPosition(0);
                             return false;
                         })
 
@@ -178,32 +161,19 @@ public class NearBlue extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(0.1)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(0);
-                            return false;
-                        })
-
-                        .waitSeconds(2)
-
-                        .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);
                             return false;
                         })
 
-                        .waitSeconds(0.8)
+                        .waitSeconds(2.1)
 
                         .stopAndAdd(telemetryPacket -> {
-                            pusherupper.setPower(0);
+                            pusherupper.setPower(0.5);
                             ramp.setPosition(0.085);
-                            return false;
-                        })
-
-                        .waitSeconds(2)
-
-                        .stopAndAdd(telemetryPacket -> {
-                            pusherupper.setPower(0.8);
                             return false;
                         })
 
@@ -212,7 +182,6 @@ public class NearBlue extends LinearOpMode {
                         .stopAndAdd(telemetryPacket -> {
                             launch.setPower(0);
                             pusherupper.setPower(0);
-                            ramp.setPosition(0);
                             return false;
                         })
 

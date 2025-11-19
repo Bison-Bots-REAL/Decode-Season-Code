@@ -13,17 +13,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp(group = "Main")
 public class Teleop extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
+    private int CameraStreamFrameRate = 12;
 
     @Override
     public void runOpMode() {
-        // Initializing the motor direction and names
+        boolean debug = gamepad1.guide;
 
         AprilTagProcessor apriltagprocessor = AprilTagProcessor.easyCreateWithDefaults();
 
@@ -34,41 +33,42 @@ public class Teleop extends LinearOpMode {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
+        if (debug) FtcDashboard.getInstance().startCameraStream(visionportal,CameraStreamFrameRate);
+
+        // Initializing the motor direction and names
         /// Driving
-        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "leftFront");
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "leftFront"); // control 2
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "leftBack");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "leftBack"); // expand 3
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront"); // control 0
         frontRight.setDirection(DcMotor.Direction.FORWARD);
 
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack"); // expand 0
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
         /// Launcher
-        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
+        DcMotor intake = hardwareMap.get(DcMotor.class, "intake"); // control 3
         intake.setDirection(DcMotor.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor launch = hardwareMap.get(DcMotor.class, "launch");
+        DcMotor launch = hardwareMap.get(DcMotor.class, "launch"); // control 1
         launch.setDirection(DcMotor.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         launch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
+        DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper"); // expand 2
         pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
         pusherupper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        Servo ramp = hardwareMap.get(Servo.class, "ramp");
+        Servo ramp = hardwareMap.get(Servo.class, "ramp"); // control 0
         ramp.setDirection(Servo.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        boolean debug = gamepad1.guide;
 
         // Pauses the code here until the Play button is pressed after init
         waitForStart();
@@ -142,16 +142,16 @@ public class Teleop extends LinearOpMode {
 
             if (launching) {
                 if (fastlaunch) {
-                    LauncherPower = -0.6;
+                    LauncherPower = 1.0;
                 } else {
-                    LauncherPower = -0.5;
+                    LauncherPower = 0.6;
                 }
             }
 
             if (gamepad2.left_bumper) {
-                IntakePower =0.4;
+                IntakePower = 0.6;
             } else if (gamepad2.x) {
-                IntakePower = -0.4;
+                IntakePower = -0.6;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {
@@ -234,9 +234,11 @@ public class Teleop extends LinearOpMode {
 
             telemetry.addLine();
             telemetry.addLine("SERVOS");
-            telemetry.addData("Ramp", "%4.2f", rampPosition);
+            telemetry.addData("Ramp Target", "%4.2f", rampPosition);
+            telemetry.addData("Ramp Position", "%4.2f", ramp.getPosition());
 
             telemetry.update();
+            //if (debug) FtcDashboard.getInstance().sendTelemetryPacket(new TelemetryPacket()); // TODO fix this
         }
     }
 }

@@ -16,10 +16,10 @@ public class BasicAuto extends LinearOpMode{
     public void runOpMode() {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "leftFront");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "leftBack");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack");
 
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);

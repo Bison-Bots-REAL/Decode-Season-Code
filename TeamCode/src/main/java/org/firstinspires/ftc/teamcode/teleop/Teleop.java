@@ -81,7 +81,7 @@ public class Teleop extends LinearOpMode {
         int framecount = 0;
         double currentFPS = 0.0;
 
-        double driveLowPower = 0.75;
+        double driveLowPower = 1.0;
         double intakeLowPower = 1.0;
         double launchLowPower = 1.0;
         double pusherupperLowPower = 0.8;
@@ -140,13 +140,18 @@ public class Teleop extends LinearOpMode {
                 fastlaunch = true;
             }
 
+
             if (launching) {
-                if (fastlaunch) {
+                if (gamepad1.back) {
+                    LauncherPower = -1.0;
+                } else if (fastlaunch) {
                     LauncherPower = 1.0;
                 } else {
                     LauncherPower = 0.6;
                 }
             }
+
+
 
             if (gamepad2.left_bumper) {
                 IntakePower = 0.6;

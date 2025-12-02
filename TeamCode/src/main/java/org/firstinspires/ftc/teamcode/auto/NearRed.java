@@ -44,14 +44,14 @@ public class NearRed extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                         .stopAndAdd(telemetryPacket -> {
                             intake.setPower(1);
-                            launch.setPower(0.6);
+                            launch.setPower(0.60);
                             return false;
                         })
 
                         //.strafeTo(new Vector2d(50,15))
                         //.turn(Math.toRadians(-20))
-                        .splineTo(new Vector2d(-14,15),Math.toRadians(140))
-                        .waitSeconds(0.2)
+                        .splineTo(new Vector2d(-14,15),Math.toRadians(132))
+                        .waitSeconds(0.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(0.085);
@@ -99,16 +99,16 @@ public class NearRed extends LinearOpMode {
                         //.turnTo(Math.toRadians(90))
                         .splineTo(new Vector2d(-11,28),Math.toRadians(90))
                         //.strafeTo(new Vector2d(-11,28))
-                        .strafeTo(new Vector2d(-11,42))
+                        .strafeTo(new Vector2d(-11,50))
 
                         .stopAndAdd(telemetryPacket -> {
-                            launch.setPower(0.6);
+                            launch.setPower(0.61);
                             return false;
                         })
 
                         //.turnTo(Math.toRadians(160))
-                        .splineTo(new Vector2d(-14,15),Math.toRadians(140))
-                        .waitSeconds(0.2)
+                        .splineTo(new Vector2d(-14,15),Math.toRadians(132))
+                        .waitSeconds(0.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(0.085);
@@ -154,10 +154,11 @@ public class NearRed extends LinearOpMode {
                         })
 
                         //.turnTo(Math.toRadians(90))
-                        .splineTo(new Vector2d(13,28),Math.toRadians(90))
+                        //.splineTo(new Vector2d(13,28),Math.toRadians(90))
                         //.strafeTo(new Vector2d(13,28))
-                        .strafeTo(new Vector2d(13,42))
+                        //.strafeTo(new Vector2d(13,42))
 
+                        /*
                         .stopAndAdd(telemetryPacket -> {
                             launch.setPower(0.6);
                             return false;
@@ -209,6 +210,7 @@ public class NearRed extends LinearOpMode {
                             ramp.setPosition(0);
                             return false;
                         })
+                         */
 
                         /*
                         //.turnTo(Math.toRadians(90))

@@ -160,9 +160,11 @@ public class NearBlue extends LinearOpMode {
                         })
 
                         //.turnTo(Math.toRadians(90))
-                        .splineTo(new Vector2d(13,-28),Math.toRadians(-90))
+                        //.splineTo(new Vector2d(13,-28),Math.toRadians(-90))
                         //.strafeTo(new Vector2d(13,28))
-                        .strafeTo(new Vector2d(13,-42))
+                        //.strafeTo(new Vector2d(13,-42))
+
+                        /*
 
                         .stopAndAdd(telemetryPacket -> {
                             launch.setPower(0.6);
@@ -215,6 +217,8 @@ public class NearBlue extends LinearOpMode {
                             ramp.setPosition(0);
                             return false;
                         })
+
+                         */
 
                         /*
                         //.turnTo(Math.toRadians(90))

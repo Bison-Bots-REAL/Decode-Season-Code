@@ -107,7 +107,7 @@ public class NearRed extends LinearOpMode {
                         })
 
                         //.turnTo(Math.toRadians(160))
-                        .splineTo(new Vector2d(-14,15),Math.toRadians(132))
+                        .splineTo(new Vector2d(-15,16),Math.toRadians(132))
                         .waitSeconds(0.6)
 
                         .stopAndAdd(telemetryPacket -> {

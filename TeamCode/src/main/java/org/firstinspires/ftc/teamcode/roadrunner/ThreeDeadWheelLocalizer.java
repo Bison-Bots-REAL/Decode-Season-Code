@@ -28,7 +28,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
     public static Params PARAMS = new Params();
 
-    public final Encoder par0, par1, perp; // perp = 1expan per0 = 2expan per1 = 3control
+    public final Encoder par0, par1, perp; // perp = 0control per0 = 2expan per1 = 3control
 
     public final double inPerTick;
 
@@ -42,7 +42,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "intake")));
         par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "pusherupper")));
-        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "launch")));
+        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "rightFront")));
 
         // TODO: reverse encoder directions if needed
         par0.setDirection(DcMotorEx.Direction.REVERSE);

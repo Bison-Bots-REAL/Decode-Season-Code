@@ -18,10 +18,17 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 public class Teleop extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
-    private int CameraStreamFrameRate = 12;
 
     @Override
     public void runOpMode() {
+        final double intakePower = 0.6;
+        final double fastDriveSpeed = 1.0;
+        final double driveSpeed = 0.75;
+        final double fastLaunchSpeed = 1.0;
+        final double launchSpeed = 0.6;
+        final double rampUpPosition = 0.08;
+        final double rampDownPosition = 0;
+
         boolean debug = gamepad1.guide;
 
         AprilTagProcessor apriltagprocessor = AprilTagProcessor.easyCreateWithDefaults();
@@ -33,7 +40,8 @@ public class Teleop extends LinearOpMode {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
-        if (debug) FtcDashboard.getInstance().startCameraStream(visionportal,CameraStreamFrameRate);
+        int cameraStreamFrameRate = 12;
+        if (debug) FtcDashboard.getInstance().startCameraStream(visionportal, cameraStreamFrameRate);
 
         // Initializing the motor direction and names
         /// Driving
@@ -45,6 +53,7 @@ public class Teleop extends LinearOpMode {
 
         DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront"); // control 0
         frontRight.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack"); // expand 0
         backRight.setDirection(DcMotor.Direction.FORWARD);
@@ -57,7 +66,6 @@ public class Teleop extends LinearOpMode {
         DcMotor launch = hardwareMap.get(DcMotor.class, "launch"); // control 1
         launch.setDirection(DcMotor.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper"); // expand 2
         pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -129,9 +137,9 @@ public class Teleop extends LinearOpMode {
 
             /// Launcher Inputs
             if (gamepad2.y) {
-                rampPosition = 0.08;
+                rampPosition = rampUpPosition;
             } else if (gamepad2.a) {
-                rampPosition = 0;
+                rampPosition = rampDownPosition;
             }
 
             if (gamepad2.dpad_down) {
@@ -143,25 +151,31 @@ public class Teleop extends LinearOpMode {
 
             if (launching) {
                 if (gamepad1.back) {
-                    LauncherPower = -1.0;
+                    LauncherPower = -fastLaunchSpeed;
                 } else if (fastlaunch) {
-                    LauncherPower = 1.0;
+                    LauncherPower = fastLaunchSpeed;
                 } else {
-                    LauncherPower = 0.6;
+                    LauncherPower = launchSpeed;
                 }
             }
 
 
 
             if (gamepad2.left_bumper) {
-                IntakePower = 0.6;
+                IntakePower = intakePower;
             } else if (gamepad2.x) {
-                IntakePower = -0.6;
+                IntakePower = -intakePower;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {
                 LauncherPower = 0;
                 launching = false;
+            }
+
+            if (gamepad1.right_trigger > 0.05) {
+                driveLowPower = fastDriveSpeed;
+            } else {
+                driveLowPower = driveSpeed;
             }
 
             if (gamepad2.back) {
@@ -200,7 +214,7 @@ public class Teleop extends LinearOpMode {
 
             ramp.setPosition(rampPosition);
 
-            /// Calculate Frame Rate (Only use in debugging keep commented out in competition)
+            /// Calculate Frame Rate (Only used in debugging)
             if (debug) {
                 long currentTime = System.nanoTime();
                 long elapsedTime = currentTime - lastTime;

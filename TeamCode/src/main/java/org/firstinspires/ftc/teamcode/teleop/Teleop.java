@@ -170,7 +170,9 @@ public class Teleop extends LinearOpMode {
                 reversedintake = true;
             } else if (!gamepad2.x) {
                 reversedintake = false;
-            } else if (gamepad2.right_bumper) {
+            }
+
+            if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {
                 LauncherPower = 0;

@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.teleop.launchtesting;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
-public class launcherencodertest extends LinearOpMode{
+public class launcherencoderusingtest extends LinearOpMode{
     @Override
     public void runOpMode() {
         DcMotor launcher = hardwareMap.get(DcMotor.class, "launch"); // Replace "myMotor" with your motor's name

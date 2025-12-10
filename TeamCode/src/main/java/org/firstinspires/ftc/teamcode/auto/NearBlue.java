@@ -26,7 +26,7 @@ public class NearBlue extends LinearOpMode {
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
         final double fastLaunchSpeed = 0.8;
-        final double launchSpeed = 0.55;
+        final double launchSpeed = 0.6;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0;
 

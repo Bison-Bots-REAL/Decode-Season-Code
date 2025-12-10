@@ -21,10 +21,10 @@ public class Teleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        final double intakePower = 0.6;
+        final double intakeSpeed = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 1.0;
+        final double fastLaunchSpeed = 0.8;
         final double launchSpeed = 0.6;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0;
@@ -46,17 +46,17 @@ public class Teleop extends LinearOpMode {
         // Initializing the motor direction and names
         /// Driving
         DcMotor frontLeft = hardwareMap.get(DcMotor.class, "leftFront"); // control 2
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
 
         DcMotor backLeft = hardwareMap.get(DcMotor.class, "leftBack"); // expand 3
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
 
         DcMotor frontRight = hardwareMap.get(DcMotor.class, "rightFront"); // control 0
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor backRight = hardwareMap.get(DcMotor.class, "rightBack"); // expand 0
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         /// Launcher
         DcMotor intake = hardwareMap.get(DcMotor.class, "intake"); // control 3
@@ -68,7 +68,7 @@ public class Teleop extends LinearOpMode {
         launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper"); // expand 2
-        pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
+        pusherupper.setDirection(DcMotorSimple.Direction.FORWARD);
         pusherupper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp"); // control 0
@@ -84,6 +84,9 @@ public class Teleop extends LinearOpMode {
 
         boolean fastlaunch = false;
         boolean launching = false;
+
+        boolean reversedintake = false;
+        boolean intaking = false;
 
         long lastTime = System.nanoTime();
         int framecount = 0;
@@ -162,14 +165,24 @@ public class Teleop extends LinearOpMode {
 
 
             if (gamepad2.left_bumper) {
-                IntakePower = intakePower;
+                intaking = true;
             } else if (gamepad2.x) {
-                IntakePower = -intakePower;
+                reversedintake = true;
+            } else if (!gamepad2.x) {
+                reversedintake = false;
             } else if (gamepad2.right_bumper) {
                 launching = true;
             } else if (gamepad2.b) {
                 LauncherPower = 0;
                 launching = false;
+            }
+
+            if (intaking) {
+                if (reversedintake) {
+                    IntakePower = -intakeSpeed;
+                } else {
+                    IntakePower = intakeSpeed;
+                }
             }
 
             if (gamepad1.right_trigger > 0.05) {
@@ -181,7 +194,6 @@ public class Teleop extends LinearOpMode {
             if (gamepad2.back) {
                 rampPosition = 0;
                 IntakePower = 0;
-                PusherUpperPower = 0;
                 LauncherPower = 0;
                 launching = false;
             }
@@ -190,7 +202,7 @@ public class Teleop extends LinearOpMode {
                 IntakePower = 0;
             }
 
-            PusherUpperPower = gamepad2.right_trigger;
+            PusherUpperPower = (gamepad2.right_trigger - gamepad2.left_trigger) * 0.8;
 
             // Apply Low Powers to components to slow down if needed
             IntakePower *= intakeLowPower;
@@ -257,7 +269,6 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Ramp Position", "%4.2f", ramp.getPosition());
 
             telemetry.update();
-            //if (debug) FtcDashboard.getInstance().sendTelemetryPacket(new TelemetryPacket()); // TODO fix this
         }
     }
 }

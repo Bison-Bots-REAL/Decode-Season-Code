@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
-public class launcherencoderusingtest extends LinearOpMode{
+public class launcherencoderusingtest extends LinearOpMode {
     @Override
     public void runOpMode() {
         DcMotor launcher = hardwareMap.get(DcMotor.class, "launch"); // Replace "myMotor" with your motor's name
         launcher.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Optional: Set motor direction if needed
+        // Set motor direction if needed
         // myMotor.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
@@ -21,32 +21,44 @@ public class launcherencoderusingtest extends LinearOpMode{
         waitForStart();
 
         // Start the motor (adjust power as needed)
-        launcher.setPower(0.6); // 1131
+        double launcherPower = 0.0; // 1131 at 0.6`j/
+        launcher.setPower(launcherPower);
+
+        int goalticks = 3;
 
         // Get initial encoder position
-        int initialTicks = launcher.getCurrentPosition();
+        int lastTicks = launcher.getCurrentPosition();
 
-        // Wait for 1 second
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        // Get final encoder position
-        int finalTicks = launcher.getCurrentPosition();
+        // Get current encoder position
+        int currentTicks;
 
         // Calculate ticks traveled
-        int ticksPerSecond = finalTicks - initialTicks;
-
-        // Stop the motor
-        launcher.setPower(0);
-
-        telemetry.addData("Ticks traveled per second", ticksPerSecond/10);
-        telemetry.update();
+        int ticksPerSecond;
 
         while (opModeIsActive()) {
-            // Keep the Opmode active
+            currentTicks = launcher.getCurrentPosition();
+            ticksPerSecond = currentTicks - lastTicks;
+
+            if (ticksPerSecond > goalticks) {
+                launcherPower -= 0.01;
+
+                if (launcherPower > 1) launcherPower = 1;
+
+                launcher.setPower(launcherPower);
+            } else if (ticksPerSecond < goalticks) {
+                launcherPower += 0.01;
+
+                if (launcherPower < 0) launcherPower = 0;
+
+                launcher.setPower(launcherPower);
+            }
+            
+            lastTicks = currentTicks;
+
+            telemetry.addData("Ticks per Second", ticksPerSecond);
+            telemetry.addData("Current ticks", currentTicks);
+            telemetry.addData("Last Ticks", lastTicks);
+            telemetry.update();
         }
     }
 }

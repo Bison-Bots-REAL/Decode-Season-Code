@@ -25,8 +25,8 @@ public class NearBlue extends LinearOpMode {
         final double intakePower = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 0.8;
-        final double launchSpeed = 0.6;
+        final double fastLaunchSpeed = 0.64;
+        final double launchSpeed = 0.625;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0;
 
@@ -58,14 +58,14 @@ public class NearBlue extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                         .stopAndAdd(telemetryPacket -> {
                             intake.setPower(intakePower);
-                            launch.setPower(launchSpeed);
+                            launch.setPower(fastLaunchSpeed);
                             return false;
                         })
 
                         //.strafeTo(new Vector2d(50,15))
                         //.turn(Math.toRadians(-20))
                         .splineTo(new Vector2d(-18,-20),Math.toRadians(220))
-                        .waitSeconds(0.2)
+                        .waitSeconds(0.8)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(rampUpPosition);
@@ -122,7 +122,7 @@ public class NearBlue extends LinearOpMode {
 
                         //.turnTo(Math.toRadians(160))
                         .splineTo(new Vector2d(-18,-20),Math.toRadians(220))
-                        .waitSeconds(0.2)
+                        .waitSeconds(0.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(rampUpPosition);

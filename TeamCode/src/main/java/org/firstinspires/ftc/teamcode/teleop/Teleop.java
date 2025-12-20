@@ -1,18 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import android.util.Size;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(group = "Main")
 public class Teleop extends LinearOpMode {
@@ -24,24 +17,12 @@ public class Teleop extends LinearOpMode {
         final double intakeSpeed = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 0.8;
-        final double launchSpeed = 0.6;
+        final double fastLaunchSpeed = 0.6825;
+        final double launchSpeed = 0.546;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0;
 
         boolean debug = gamepad1.guide;
-
-        AprilTagProcessor apriltagprocessor = AprilTagProcessor.easyCreateWithDefaults();
-
-        VisionPortal visionportal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessor(apriltagprocessor)
-                .setCameraResolution(new Size(640, 480))
-                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .build();
-
-        int cameraStreamFrameRate = 12;
-        if (debug) FtcDashboard.getInstance().startCameraStream(visionportal, cameraStreamFrameRate);
 
         // Initializing the motor direction and names
         /// Driving

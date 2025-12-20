@@ -18,6 +18,14 @@ public class NearBluepreloadonly extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        final double intakePower = 0.6;
+        final double fastDriveSpeed = 1.0;
+        final double driveSpeed = 0.75;
+        final double fastLaunchSpeed = 0.64;
+        final double launchSpeed = 0.63;
+        final double rampUpPosition = 0.08;
+        final double rampDownPosition = 0;
+
         Pose2d beginPose = new Pose2d(-55, -46, Math.toRadians(55));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
@@ -32,7 +40,7 @@ public class NearBluepreloadonly extends LinearOpMode {
         launch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper");
-        pusherupper.setDirection(DcMotorSimple.Direction.REVERSE);
+        pusherupper.setDirection(DcMotorSimple.Direction.FORWARD);
         pusherupper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp");
@@ -45,25 +53,25 @@ public class NearBluepreloadonly extends LinearOpMode {
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                         .stopAndAdd(telemetryPacket -> {
-                            intake.setPower(1);
-                            launch.setPower(0.6);
+                            intake.setPower(intakePower);
+                            launch.setPower(fastLaunchSpeed);
                             return false;
                         })
 
                         //.strafeTo(new Vector2d(50,15))
                         //.turn(Math.toRadians(-20))
                         .splineTo(new Vector2d(-18,-20),Math.toRadians(220))
-                        .waitSeconds(0.2)
+                        .waitSeconds(0.8)
 
                         .stopAndAdd(telemetryPacket -> {
-                            ramp.setPosition(0.085);
+                            ramp.setPosition(rampUpPosition);
                             return false;
                         })
 
                         .waitSeconds(2)
 
                         .stopAndAdd(telemetryPacket -> {
-                            ramp.setPosition(0);
+                            ramp.setPosition(rampDownPosition);
                             return false;
                         })
 
@@ -78,7 +86,7 @@ public class NearBluepreloadonly extends LinearOpMode {
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0);
-                            ramp.setPosition(0.085);
+                            ramp.setPosition(rampUpPosition);
                             return false;
                         })
 
@@ -89,12 +97,12 @@ public class NearBluepreloadonly extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(1.8)
+                        .waitSeconds(0.8)
 
                         .stopAndAdd(telemetryPacket -> {
                             launch.setPower(0);
                             pusherupper.setPower(0);
-                            ramp.setPosition(0);
+                            ramp.setPosition(rampDownPosition);
                             return false;
                         })
 

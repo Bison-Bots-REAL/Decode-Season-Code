@@ -21,8 +21,8 @@ public class NearRed extends LinearOpMode {
         final double intakePower = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 0.8;
-        final double launchSpeed = 0.6;
+        final double fastLaunchSpeed = 0.64;
+        final double launchSpeed = 0.63;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0;
 
@@ -52,28 +52,28 @@ public class NearRed extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                         .stopAndAdd(telemetryPacket -> {
                             intake.setPower(intakePower);
-                            launch.setPower(launchSpeed);
+                            launch.setPower(fastLaunchSpeed);
                             return false;
                         })
 
                         //.strafeTo(new Vector2d(50,15))
                         //.turn(Math.toRadians(-20))
                         .splineTo(new Vector2d(-14,15),Math.toRadians(132))
-                        .waitSeconds(0.6)
+                        .waitSeconds(0.8)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(rampUpPosition);
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(1)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(rampDownPosition);
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(1)
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);
@@ -88,7 +88,7 @@ public class NearRed extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(1.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);
@@ -123,21 +123,21 @@ public class NearRed extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(1.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             ramp.setPosition(rampDownPosition);
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(1.2)
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);
                             return false;
                         })
 
-                        .waitSeconds(0.8)
+                        .waitSeconds(0.6)
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0);
@@ -145,7 +145,7 @@ public class NearRed extends LinearOpMode {
                             return false;
                         })
 
-                        .waitSeconds(2)
+                        .waitSeconds(2.2)
 
                         .stopAndAdd(telemetryPacket -> {
                             pusherupper.setPower(0.8);

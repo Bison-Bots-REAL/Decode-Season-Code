@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,8 +20,8 @@ public class Teleop extends LinearOpMode {
         final double intakeSpeed = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 0.6825;
-        final double launchSpeed = 0.546;
+        final double fastLaunchSpeed = 1600;
+        final double launchSpeed = 1200;
         final double rampUpPosition = 0.12;
         final double rampDownPosition = 0.08;
 
@@ -44,10 +47,12 @@ public class Teleop extends LinearOpMode {
         intake.setDirection(DcMotor.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor launch = hardwareMap.get(DcMotor.class, "launch"); // control 1
-        launch.setDirection(DcMotor.Direction.REVERSE);
-        launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        DcMotorEx launch = hardwareMap.get(DcMotorEx.class, "launch"); // control 1
+        launch.setDirection(DcMotorEx.Direction.REVERSE);
+        launch.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 5);
+        launch.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 
 

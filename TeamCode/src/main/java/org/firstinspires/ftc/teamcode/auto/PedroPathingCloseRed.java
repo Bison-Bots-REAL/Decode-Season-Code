@@ -31,7 +31,9 @@ public class PedroPathingCloseRed extends OpMode{
 
         SHOOT_PRELOAD,
 
-        DRIVE_PRELOAD_POS_MARK_ONE
+        DRIVE_PRELOAD_POS_MARK_ONE,
+
+        SHOOT_MARK_ONE
     }
 
     // ----------------------End of Things---------------------------
@@ -47,7 +49,7 @@ public class PedroPathingCloseRed extends OpMode{
 
 
 
-    private PathChain driveStartPosShootPos, driveShootPosMarkPos;
+    private PathChain driveStartPosShootPos, driveShootPosMarkPos, driveMarkPosShootPos;
 
     public void buildPaths(){
         // put coordinates for starting position and end position
@@ -59,7 +61,10 @@ public class PedroPathingCloseRed extends OpMode{
                 .addPath(new BezierLine(shootPose, markPose))
                 .setConstantHeadingInterpolation(markPose.getHeading())
                 .build();
-
+        driveMarkPosShootPos = follower.pathBuilder()
+                .addPath(new BezierLine(markPose, shootPose))
+                .setLinearHeadingInterpolation(markPose.getHeading(), shootPose.getHeading())
+                .build();
     }
 
     public void statePathUpdate(){
@@ -76,10 +81,10 @@ public class PedroPathingCloseRed extends OpMode{
                         shotsTriggered = true;
                     }
                     else if (shotsTriggered && !shooter.isBusy()) {
-                    //shots are done and free to transition
-                    follower.followPath(driveShootPosMarkPos, true);
-                    setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
-                    telemetry.addLine("Done Path 1");
+                        //shots are done and free to transition
+                        follower.followPath(driveShootPosMarkPos, true);
+                        setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
+                        telemetry.addLine("Done Path 1");
                     }
                 }
                 break;
@@ -87,7 +92,23 @@ public class PedroPathingCloseRed extends OpMode{
             case DRIVE_PRELOAD_POS_MARK_ONE:
                 if (!follower.isBusy()){
                     //add transition state to next path
+                    follower.followPath(driveMarkPosShootPos, true);
+                    setPathState(PathState.SHOOT_MARK_ONE);
                     telemetry.addLine("Done Path 2");
+                }
+                break;
+            case SHOOT_MARK_ONE:
+                if (!follower.isBusy()){
+                    if(!shotsTriggered){
+                        shooter.fireShots(1);
+                        shotsTriggered = true;
+                    }
+                    else if (shotsTriggered && !shooter.isBusy()) {
+                        //shots are done and free to transition
+                        follower.followPath(driveShootPosMarkPos, true);
+                        setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
+                        telemetry.addLine("Done Path 3");
+                    }
                 }
                 break;
             default:
@@ -121,7 +142,6 @@ public class PedroPathingCloseRed extends OpMode{
 
 
     public void start(){
-
         opModeTimer.resetTimer();
         setPathState(pathState);
     }

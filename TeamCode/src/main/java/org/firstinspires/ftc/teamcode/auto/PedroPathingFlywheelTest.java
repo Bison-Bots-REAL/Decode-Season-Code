@@ -35,21 +35,21 @@ public class PedroPathingFlywheelTest {
     private FlywheelState flywheelState;
 
     // ------------------------- RAMP LOGIC------------------------------
-    private double rampUpPosition = 0.12;
+    private double rampUpPosition = 0.13;
     private double rampDownPosition = 0.08;
 
-    private double rampUpTime = 1;
-    private double rampDownTime = 1;
+    private double rampUpTime = 0.6;
+    private double rampDownTime = 0.75;
 
     // --------------------FLYWHEEL CONSTANTS --------------------------------
     private int shotsRemain = 0;
 
     private double flywheelVelocity = 0;
-    private double minFlywheelRPM = 1250;
+    private double minFlywheelRPM = 1200;
 
-    private double targetFlywheelRPM = 1300;
+    private double targetFlywheelRPM = 1250;
 
-    private double flywheelMaxRevTime = 2;
+    private double flywheelMaxRevTime = 1.5;
 
     //FAR VALUES AREN'T TESTED YET
     private double minFarFlywheelRPM = 1550;
@@ -62,7 +62,7 @@ public class PedroPathingFlywheelTest {
     //---------------------------PUSHERUPPER CONSTANTS-------------------------
     private double pusherPower = 0.8;
 
-    private double pusherTimer = 1;
+    private double pusherTimer = 0.5;
 
 
     public void init(HardwareMap hwMap){

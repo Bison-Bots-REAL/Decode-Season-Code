@@ -27,8 +27,8 @@ public class Constants {
             .lateralZeroPowerAcceleration(-51.77983429663153)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.07,0,0.007, 0.04))
             .headingPIDFCoefficients(new PIDFCoefficients (0.88, 0, 0.04, 0.04))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0.0, 0.0001, 0.025, 0.025))
-            .centripetalScaling(0.00045)
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.016, 0.0, 0.00015, 0.025, 0.025))
+            .centripetalScaling(0.0005)
 
             ;
 

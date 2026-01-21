@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -33,7 +34,11 @@ public class PedroPathingCloseRed extends OpMode{
 
         DRIVE_PRELOAD_POS_MARK_ONE,
 
-        SHOOT_MARK_ONE
+        SHOOT_MARK_ONE,
+
+        DRIVE_PRELOAD_POS_MARK_TWO,
+
+        SHOOT_MARK_TWO
     }
 
     // ----------------------End of Things---------------------------
@@ -42,14 +47,14 @@ public class PedroPathingCloseRed extends OpMode{
 
     private final Pose startPose = new Pose(122.828471411902,125.51691948658109,  Math.toRadians(217));
 
-    private final Pose shootPose = new Pose (86.03033838973161,83.67794632438739, Math.toRadians(45));
+    private final Pose shootPose = new Pose (91.03033838973161,88.67794632438739, Math.toRadians(45));
 
     private final Pose markPose = new Pose (128.9031505250875,83.60793465577596, Math.toRadians(0));
 
 
 
 
-    private PathChain driveStartPosShootPos, driveShootPosMarkPos, driveMarkPosShootPos;
+    private PathChain driveStartPosShootPos, driveShootPosMarkPos, driveMarkPosShootPos, driveShootPosMark2Pos, driveMark2PosShootPos;
 
     public void buildPaths(){
         // put coordinates for starting position and end position
@@ -63,6 +68,32 @@ public class PedroPathingCloseRed extends OpMode{
                 .build();
         driveMarkPosShootPos = follower.pathBuilder()
                 .addPath(new BezierLine(markPose, shootPose))
+                .setLinearHeadingInterpolation(markPose.getHeading(), shootPose.getHeading())
+                .build();
+        driveShootPosMark2Pos = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                shootPose,
+                                new Pose(89.120, 56.942)
+                        )
+                )
+                .setLinearHeadingInterpolation(shootPose.getHeading(), markPose.getHeading())
+                .addPath(
+                        new BezierLine(
+                                new Pose(89.120, 56.942),
+                                new Pose(134.518, 59.575)
+                        )
+                )
+                .setConstantHeadingInterpolation(0)
+                .build();
+        driveMark2PosShootPos = follower.pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(129.518, 59.575),
+                                new Pose(89.120, 56.942),
+                                shootPose
+                        )
+                )
                 .setLinearHeadingInterpolation(markPose.getHeading(), shootPose.getHeading())
                 .build();
     }
@@ -105,9 +136,31 @@ public class PedroPathingCloseRed extends OpMode{
                     }
                     else if (shotsTriggered && !shooter.isBusy()) {
                         //shots are done and free to transition
-                        follower.followPath(driveShootPosMarkPos, true);
-                        setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
+                        follower.followPath(driveShootPosMark2Pos, true);
+                        setPathState(PathState.DRIVE_PRELOAD_POS_MARK_TWO);
                         telemetry.addLine("Done Path 3");
+                    }
+                }
+                break;
+            case DRIVE_PRELOAD_POS_MARK_TWO:
+                if (!follower.isBusy()){
+                    //add transition state to next path
+                    follower.followPath(driveMark2PosShootPos, true);
+                    setPathState(PathState.SHOOT_MARK_TWO);
+                    telemetry.addLine("Done Path 2");
+                }
+                break;
+            case SHOOT_MARK_TWO:
+                if (!follower.isBusy()){
+                    if(!shotsTriggered){
+                        shooter.fireShots(1);
+                        shotsTriggered = true;
+                    }
+                    else if (shotsTriggered && !shooter.isBusy()) {
+                        //shots are done and free to transition
+                        //follower.followPath(driveShootPosMark2Pos, true);
+                        //setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
+                        telemetry.addLine("Done Auto");
                     }
                 }
                 break;

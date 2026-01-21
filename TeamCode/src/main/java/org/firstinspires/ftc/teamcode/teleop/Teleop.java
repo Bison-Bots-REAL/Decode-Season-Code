@@ -21,7 +21,7 @@ public class Teleop extends LinearOpMode {
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
         final double fastLaunchSpeed = 1600;
-        final double launchSpeed = 1200;
+        final double launchSpeed = 1250;
         final double rampUpPosition = 0.12;
         final double rampDownPosition = 0.08;
 
@@ -51,7 +51,7 @@ public class Teleop extends LinearOpMode {
         launch.setDirection(DcMotorEx.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 5);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 15);
         launch.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 
@@ -211,7 +211,7 @@ public class Teleop extends LinearOpMode {
             backLeft.setPower(backLeftPower);
             backRight.setPower(backRightPower);
 
-            launch.setPower(LauncherPower);
+            launch.setVelocity(LauncherPower);
             intake.setPower(IntakePower);
             pusherupper.setPower(PusherUpperPower);
 

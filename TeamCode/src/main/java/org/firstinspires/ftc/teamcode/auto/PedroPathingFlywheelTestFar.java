@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 
-public class PedroPathingFlywheelTest {
+public class PedroPathingFlywheelTestFar {
     private DcMotorEx intake;
 
     private DcMotorEx shooter;

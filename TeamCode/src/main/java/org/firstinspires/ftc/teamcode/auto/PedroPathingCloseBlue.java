@@ -5,16 +5,15 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.pedropathing.util.Timer;
-
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 @Autonomous
-public class PedroPathingCloseRed extends OpMode{
+public class PedroPathingCloseBlue extends OpMode{
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -47,11 +46,11 @@ public class PedroPathingCloseRed extends OpMode{
 
     PathState pathState;
 
-    private final Pose startPose = new Pose(122.828471411902,125.51691948658109,  Math.toRadians(217));
+    private final Pose startPose = new Pose(21.420571428571428,125.98537489581595,  Math.toRadians(324));
 
-    private final Pose shootPose = new Pose (91.03033838973161,88.67794632438739, Math.toRadians(45));
+    private final Pose shootPose = new Pose (56.81028571428571,85.70057142857144, Math.toRadians(135));
 
-    private final Pose markPose = new Pose (128.9031505250875,83.60793465577596, Math.toRadians(0));
+    private final Pose markPose = new Pose (14,82.72342857142857, Math.toRadians(180));
 
 
 
@@ -67,7 +66,7 @@ public class PedroPathingCloseRed extends OpMode{
         driveShootPosMarkPos = follower.pathBuilder()
                 .addPath(new BezierLine(
                         shootPose,
-                        new Pose(markPose.getX() - 40, markPose.getY(), markPose.getHeading())
+                        new Pose(markPose.getX() + 40, markPose.getY(), markPose.getHeading())
                 ))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), markPose.getHeading())
                 .addPath(new BezierLine(shootPose, markPose))
@@ -81,23 +80,23 @@ public class PedroPathingCloseRed extends OpMode{
                 .addPath(
                         new BezierLine(
                                 shootPose,
-                                new Pose(89.120, 56.942)
+                                new Pose(59.78514285714286, 60.01485714285717)
                         )
                 )
                 .setLinearHeadingInterpolation(shootPose.getHeading(), markPose.getHeading())
                 .addPath(
                         new BezierLine(
-                                new Pose(89.120, 56.942),
-                                new Pose(134.518, 59.575)
+                                new Pose(59.78514285714286, 60.01485714285717),
+                                new Pose(8.681142857142858, 57.366857142857135)
                         )
                 )
-                .setConstantHeadingInterpolation(0)
+                .setConstantHeadingInterpolation(markPose.getHeading())
                 .build();
         driveMark2PosShootPos = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(129.518, 59.575),
-                                new Pose(89.120, 56.942),
+                                new Pose(8.681142857142858, 57.366857142857135),
+                                new Pose(43.775999999999996, 43.94057142857147),
                                 shootPose
                         )
                 )
@@ -174,10 +173,8 @@ public class PedroPathingCloseRed extends OpMode{
                     }
                     else if (shotsTriggered && !shooter.isBusy()) {
                         //shots are done and free to transition
-                        //follower.followPath(driveShootPosMark2Pos, true);
-                        //setPathState(PathState.DRIVE_PRELOAD_POS_MARK_ONE);
                         follower.followPath(leave, true);
-                        setPathState(PedroPathingCloseRed.PathState.LEAVE);
+                        setPathState(PathState.LEAVE);
                         telemetry.addLine("Done Auto");
                     }
                 }
@@ -185,7 +182,7 @@ public class PedroPathingCloseRed extends OpMode{
             case LEAVE:
                 if (!follower.isBusy()){
                     //add transition state to next path
-                    telemetry.addLine("Done");
+                    telemetry.addLine("Done leaving");
                 }
                 break;
             default:

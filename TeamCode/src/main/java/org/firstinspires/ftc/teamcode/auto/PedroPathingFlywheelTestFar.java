@@ -47,12 +47,12 @@ public class PedroPathingFlywheelTestFar {
 
     private double targetFlywheelRPM = 1250;
 
-    private double flywheelMaxRevTime = 1.5;
+    private double flywheelMaxRevTime = 1.75;
 
     //FAR VALUES AREN'T TESTED YET
-    private double minFarFlywheelRPM = 1550;
+    private double minFarFlywheelRPM = 1500;
 
-    private double targetFarFlywheelRPM = 1600;
+    private double targetFarFlywheelRPM = 1530;
 
     //-----------------------INTAKE CONSTANTS------------------------------
     private double intakePower = 0.6;
@@ -73,7 +73,7 @@ public class PedroPathingFlywheelTestFar {
         shooter.setDirection(DcMotorEx.Direction.REVERSE);
         shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         shooter.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 5);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(450, 0 ,0, 15);
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         //TODO add PIDF tuning
 
@@ -98,7 +98,7 @@ public class PedroPathingFlywheelTestFar {
             case IDLE:
                 if (shotsRemain > 0){
                     ramp.setPosition(rampDownPosition);
-                    shooter.setVelocity(targetFlywheelRPM);
+                    shooter.setVelocity(targetFarFlywheelRPM);
                     intake.setPower(intakePower);
 
                     stateTimer.reset();
@@ -106,7 +106,7 @@ public class PedroPathingFlywheelTestFar {
                 }
                 break;
             case SPIN:
-                if (flywheelVelocity > minFlywheelRPM || stateTimer.seconds() > flywheelMaxRevTime){
+                if (flywheelVelocity > minFarFlywheelRPM || stateTimer.seconds() > flywheelMaxRevTime){
                     ramp.setPosition(rampUpPosition);
 
                     stateTimer.reset();
@@ -168,7 +168,6 @@ public class PedroPathingFlywheelTestFar {
                 if (stateTimer.seconds() > rampUpTime){
                     ramp.setPosition(rampDownPosition);
                     pusherupper.setPower(0);
-                    shooter.setVelocity(0);
 
 
 

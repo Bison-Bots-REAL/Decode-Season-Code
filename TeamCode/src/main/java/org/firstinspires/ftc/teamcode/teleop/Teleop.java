@@ -84,7 +84,7 @@ public class Teleop extends LinearOpMode {
         double driveLowPower = 1.0;
         double intakeLowPower = 1.0;
         double launchLowPower = 1.0;
-        double pusherupperLowPower = 0.8;
+        double pusherupperLowPower = 0.6;
 
         double frontLeftPower;
         double backLeftPower;
@@ -96,7 +96,7 @@ public class Teleop extends LinearOpMode {
         double IntakePower = 0;
         double PusherUpperPower = 0;
 
-        double rampPosition = 0.0;
+        double rampPosition = rampDownPosition;
         ramp.setPosition(rampPosition);
 
         // run until the end of the match (driver presses STOP)

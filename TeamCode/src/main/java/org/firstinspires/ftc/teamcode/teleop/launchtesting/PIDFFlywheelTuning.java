@@ -15,7 +15,7 @@ public class PIDFFlywheelTuning extends OpMode{
     public DcMotorEx flywheelMotor;
 
     public double highVelocity = 1500;
-    public double lowVelocity = 1200;
+    public double lowVelocity = 1250;
 
     double curTargetVelocity = highVelocity;
 

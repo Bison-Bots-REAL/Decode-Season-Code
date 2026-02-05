@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
+@Disabled
 @Autonomous
 public class FarRed extends LinearOpMode {
     private final ElapsedTime runtime = new ElapsedTime();

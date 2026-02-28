@@ -46,7 +46,7 @@ public class PedroPathingCloseBlue extends OpMode{
 
     PathState pathState;
 
-    private final Pose startPose = new Pose(21.420571428571428,125.98537489581595,  Math.toRadians(324));
+    private final Pose startPose = new Pose(21.420571428571428,125.98537489581595,  Math.toRadians(135));
 
     private final Pose shootPose = new Pose (56.81028571428571,85.70057142857144, Math.toRadians(135));
 
@@ -61,7 +61,7 @@ public class PedroPathingCloseBlue extends OpMode{
         // put coordinates for starting position and end position
         driveStartPosShootPos = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
+                .setConstantHeadingInterpolation(startPose.getHeading())
                 .build();
         driveShootPosMarkPos = follower.pathBuilder()
                 .addPath(new BezierLine(

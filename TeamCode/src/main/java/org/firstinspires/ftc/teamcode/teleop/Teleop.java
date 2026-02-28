@@ -10,6 +10,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
 @TeleOp(group = "Main")
 public class Teleop extends LinearOpMode {
 
@@ -21,9 +25,9 @@ public class Teleop extends LinearOpMode {
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
         final double fastLaunchSpeed = 1530;
-        final double launchSpeed = 1250;
-        final double rampUpPosition = 0.12;
-        final double rampDownPosition = 0.08;
+        final double launchSpeed = 1200;
+        final double rampUpPosition = 0.08;
+        final double rampDownPosition = 0.04;
 
         boolean debug = gamepad1.guide;
 
@@ -51,9 +55,15 @@ public class Teleop extends LinearOpMode {
         launch.setDirection(DcMotorEx.Direction.REVERSE);
         launch.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 15);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(300, 0 ,0, 13);
         launch.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
+        DcMotorEx launch2 = hardwareMap.get(DcMotorEx.class, "launch2"); //
+        launch2.setDirection(DcMotorEx.Direction.FORWARD);
+        launch2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        launch2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        PIDFCoefficients pidfCoefficients2 = new PIDFCoefficients(300, 0 ,0, 13);
+        launch2.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients2);
 
 
         DcMotor pusherupper = hardwareMap.get(DcMotor.class, "pusherupper"); // expand 2
@@ -62,6 +72,9 @@ public class Teleop extends LinearOpMode {
 
         Servo ramp = hardwareMap.get(Servo.class, "ramp"); // control 0
         ramp.setDirection(Servo.Direction.FORWARD);
+
+        AprilTagWebcam webcam = new AprilTagWebcam();
+        webcam.init(hardwareMap, telemetry);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -101,6 +114,8 @@ public class Teleop extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            webcam.update();
+
             /// Driving Input
             double max;
 
@@ -212,6 +227,7 @@ public class Teleop extends LinearOpMode {
             backRight.setPower(backRightPower);
 
             launch.setVelocity(LauncherPower);
+            launch2.setVelocity(LauncherPower);
             intake.setPower(IntakePower);
             pusherupper.setPower(PusherUpperPower);
 

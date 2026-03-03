@@ -24,7 +24,7 @@ public class Teleop extends LinearOpMode {
         final double intakeSpeed = 0.6;
         final double fastDriveSpeed = 1.0;
         final double driveSpeed = 0.75;
-        final double fastLaunchSpeed = 1530;
+        final double fastLaunchSpeed = 1550;
         final double launchSpeed = 1200;
         final double rampUpPosition = 0.08;
         final double rampDownPosition = 0.04;

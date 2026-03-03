@@ -205,11 +205,29 @@ public class TrackingTeleop extends OpMode {
         // Get April Tag Info
         cam.update();
         AprilTagDetection id20 = cam.getTagbyId(20);
+        AprilTagDetection id24 = cam.getTagbyId(24);
 
         // auto align logic
         if (gamepad1.left_trigger > 0.2) {
             if (id20 != null) {
                 error = goalX - id20.ftcPose.bearing;
+
+                if (Math.abs(error) < angleTolerance) {
+                    rotate = 0;
+                } else {
+                    double pTerm = error * kp;
+
+                    curTime = getRuntime();
+                    double dT = curTime - lastTime;
+                    double dTerm = ((error - lastError) / dT) * kD;
+
+                    rotate = Range.clip(pTerm + dTerm, -0.4, 0.4);
+
+                    lastError = error;
+                    lastTime = curTime;
+                }
+            } else if (id24 != null) {
+                error = goalX - id24.ftcPose.bearing;
 
                 if (Math.abs(error) < angleTolerance) {
                     rotate = 0;
@@ -240,6 +258,12 @@ public class TrackingTeleop extends OpMode {
                 telemetry.addLine("AUTO ALIGN");
             }
             cam.displayDetectionTelemetry(id20);
+            telemetry.addData("Error", error);
+        } else if (id24 != null){
+            if (gamepad1.left_trigger > 0.3) {
+                telemetry.addLine("AUTO ALIGN");
+            }
+            cam.displayDetectionTelemetry(id24);
             telemetry.addData("Error", error);
         } else {
             telemetry.addLine("MANUAL Rotate Mode");

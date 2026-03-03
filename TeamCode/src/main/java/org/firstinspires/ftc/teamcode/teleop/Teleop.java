@@ -12,9 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.teamcode.mechanisms.AprilTagWebcam;
+import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp(group = "Main")
+@TeleOp(name = "Teleop (OLD NO TRACKING)", group = "Main")
 public class Teleop extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -73,9 +74,6 @@ public class Teleop extends LinearOpMode {
         Servo ramp = hardwareMap.get(Servo.class, "ramp"); // control 0
         ramp.setDirection(Servo.Direction.FORWARD);
 
-        AprilTagWebcam webcam = new AprilTagWebcam();
-        webcam.init(hardwareMap, telemetry);
-
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -114,8 +112,6 @@ public class Teleop extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            webcam.update();
-
             /// Driving Input
             double max;
 
